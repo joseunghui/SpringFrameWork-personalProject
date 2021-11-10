@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Board">
+	<insert id="bWrite" parameterType="board">
+		INSERT INTO BOARDDTO(BNUM, BWRI, BTITLE, BCONTENT, BDATE, BHIT, BFILENAME)
+		VALUES(BOARD_SEQ.NEXTVAL, #{Bwri}, #{Btitle}, #{Bcontent}, SYSDATE, 0, #{BfileName})
+	</insert>
+	
+	<select id="bListCount" resultType="int">
+		SELECT COUNT(*) FROM BOARDDTO
+	</select>
+	
+	<select id="bList" parameterType="paging" resultType="board">
+		SELECT * FROM BLIST WHERE RN BETWEEN #{startRow} AND #{endRow}
+	</select>
+	
+	<select id="bView" parameterType="int" resultType="board"> 
+		SELECT * FROM BOARDDTO WHERE BNUM = #{Bnum}
+	</select>
+	
+	<update id="bModi" parameterType="board">
+		UPDATE BOARDDTO
+		SET BWRI=#{Bwri}, BTITLE=#{Btitle}, BCONTENT=#{Bcontent}, BDATE= SYSDATE,BHIT=0, BFILENAME=#{BfileName}
+		WHERE BNUM=#{Bnum}
+	</update>
+	
+	<delete id="bDel" parameterType="int">
+		DELETE
+		FROM BOARDDTO
+		WHERE EXISTS
+		(
+    		SELECT *
+   		 	FROM COMMENTDTO
+    		WHERE BOARDDTO.BNUM = #{Bnum}
+		)
+	</delete>
+	
+	<select id="cList" parameterType="int" resultType="comment">
+		SELECT * FROM COMMENTDTO WHERE CBNO = #{CBno} ORDER BY CNO DESC
+	</select>
+	
+	<insert id="cWrite" parameterType="comment">
+		INSERT INTO COMMENTDTO 
+		VALUES(CMT_SEG.NEXTVAL, #{CBno}, #{Cwriter}, #{Ccontent}, SYSDATE)
+	</insert>
+	
+	<delete id="cDel" parameterType="comment">
+		DELETE FROM COMMENTDTO WHERE CNO = #{Cno}
+	</delete>
+</mapper>

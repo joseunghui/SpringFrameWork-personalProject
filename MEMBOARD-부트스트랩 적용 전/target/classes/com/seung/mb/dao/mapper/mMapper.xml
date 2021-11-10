@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Member">
+
+	<insert id="mJoin" parameterType="member">
+		INSERT INTO MEMBOARD 
+		VALUES(#{Mid},#{Mpw},#{Mname},#{Mphone},#{Mbirth},#{Memail},#{Maddr},#{MprofileName})
+	</insert>
+	
+	<select id="mLogin" parameterType="member" resultType="member">
+		SELECT * FROM MEMBOARD WHERE MID = #{Mid} AND MPW = #{Mpw}
+	</select>
+	
+	<select id="mListCount" resultType="int">
+		SELECT COUNT(*) FROM MEMBOARD
+	</select>
+	
+	<select id="mList" parameterType="paging" resultType="member">
+		SELECT * FROM MLIST WHERE RN BETWEEN #{startRow} AND #{endRow}
+	</select>
+
+	<select id="mView" parameterType="String" resultType="member">
+		SELECT * FROM MEMBOARD WHERE MID = #{Mid}
+	</select>
+	
+	<update id="mModify" parameterType="member">
+		UPDATE MEMBOARD
+		SET MPW=#{Mpw}, MNAME=#{Mname}, MPHONE=#{Mphone}, MBIRTH=#{Mbirth}, MEMAIL=#{Memail}, MADDR=#{Maddr}, MPROFILENAME=#{MprofileName}
+		WHERE MID = #{Mid}
+	</update>
+	
+	<delete id="mDelete" parameterType="String">
+		DELETE FROM MEMBOARD WHERE MID=#{Mid}
+	</delete>
+	
+	<select id="idoverlap" parameterType="String" resultType="String">
+		SELECT MID FROM MEMBOARD WHERE MID = #{Mid}
+	</select>
+	
+	<select  id="mEncPw" parameterType="String" resultType="member">
+		SELECT * FROM MEMBOARD WHERE MID=#{Mid} 
+	</select>
+	
+</mapper>
